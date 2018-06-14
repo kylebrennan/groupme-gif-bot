@@ -51,8 +51,14 @@ function postMessage(request, response) {
 
   var jsonObj = request.body;
   const gifRegex = /^\/gif/;
-  if (gifRegex.test(jsonObj.text) && jsonObj.name != "Gif Bot") {
-    var searchText = jsonObj.text.substring(jsonObj.text.indexOf("/gif ")+5);
+  if ((gifRegex.test(jsonObj.text) && jsonObj.name != "Gif Bot") || (Math.floor(Math.random()*25)+1) == 1 {
+    var gifIdx = jsonObj.text.indexOf("/gif ");
+    var searchText = "";
+    if (gifIdx == -1) {
+      searchText = jsonObj.text;
+    } else {
+      searchText = jsonObj.text.substring(gifIdx+5);
+    }
     console.log("GOT A GIF " + searchText);
 
     giphy.search(searchText, function(err, res) {
