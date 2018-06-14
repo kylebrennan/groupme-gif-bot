@@ -50,9 +50,6 @@ function postMessage(request, response) {
   response.end();
 
   var jsonObj = request.body;
-  const kyleRegex = /k|Kyle/;
-  const mollieRegex = /m|Mollie/;
-  const dallasRegex = /d|Dallas/;
   const gifRegex = /^\/gif/;
   if (gifRegex.test(jsonObj.text)) {
     var searchText = jsonObj.text.substring(jsonObj.text.indexOf("/gif ")+5);
@@ -61,26 +58,6 @@ function postMessage(request, response) {
     giphy.search(searchText, function(err, res) {
       console.log(res.data[0].images.original.url);
     });
-  } else if (kyleRegex.test(jsonObj.text) || mollieRegex.test(jsonObj.text) || dallasRegex.test(jsonObj.text)) {
-    console.log("HEY CHECK IT");
-    botText = "Hey check GroupMe.";
-
-    options = {
-      hostname: 'api.groupme.com',
-      path: '/v3/bots/post',
-      method: 'POST'
-    };
-
-    body = {
-      'bot_id' : botID,
-      'text' : botText
-    };
-
-    botReq = HTTPS.request(options, function(res) {
-      console.log("Sent message");
-    });
-
-    botReq.end(JSON.stringify(body));
   }
 }
 
