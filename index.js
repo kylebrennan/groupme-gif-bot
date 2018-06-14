@@ -51,12 +51,31 @@ function postMessage(request, response) {
 
   var jsonObj = request.body;
   const gifRegex = /^\/gif/;
-  if (gifRegex.test(jsonObj.text)) {
+  if (gifRegex.test(jsonObj.text) && jsonObj.name != "Gif Bot") {
     var searchText = jsonObj.text.substring(jsonObj.text.indexOf("/gif ")+5);
     console.log("GOT A GIF " + searchText);
 
     giphy.search(searchText, function(err, res) {
-      console.log(res.data[0].images.original.url);
+      var url = res.data[0].images.original.url;
+      console.log(url);
+
+      botText = url;
+      options = {
+        hostname: 'api.groupme.com',
+        path: '/v3/bots/post',
+        method: 'POST'
+      };
+
+      body = {
+        'bot_id' : botID,
+        'text' : botText
+      };
+
+      botReq = HTTPS.request(options, function(res) {
+        console.log("Sent message");
+      });
+
+      botReq.end(JSON.stringify(body));
     });
   }
 }
